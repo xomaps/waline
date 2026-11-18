@@ -4,3 +4,5 @@ wrangler.toml
 coverage/
 dist/
 /agents
+
+.DS_Store
