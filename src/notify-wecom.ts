@@ -1,5 +1,8 @@
 import type { Env } from "./env.js";
 
+// 评论后台地址（worker 自带管理面板）；env.ADMIN_URL 可覆盖
+const ADMIN_UI_URL = "https://waline.xomaps.com/ui";
+
 /**
  * 新评论企业微信通知（商务群机器人）。
  * - env.WECOM_WEBHOOK 未配置时静默跳过
@@ -26,7 +29,7 @@ export function notifyWecomNewComment(
 		`>昵称：${nick}`,
 		`>页面：[${payload.url}](${payload.url})`,
 		`>内容：${excerpt}`,
-		pending ? ">请到博客评论后台审核通过后展示" : "",
+		pending ? `>[打开评论后台审核](${ADMIN_UI_URL})` : "",
 	]
 		.filter(Boolean)
 		.join("\n");
