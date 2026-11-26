@@ -5,6 +5,7 @@ import { getAvatar, proxyAvatar } from "../utils/avatar.js";
 import { getLevel, isEnabled, parseLevels } from "../utils/display.js";
 import { reviewComment } from "../utils/llm-review.js";
 import { renderMarkdown } from "../utils/markdown.js";
+import { notifyWecomNewComment } from "../notify-wecom.js";
 import {
 	type CommentRegion,
 	formatRegion,
@@ -157,6 +158,17 @@ commentRoutes.post("/", async (c) => {
 	// Async spam review (Akismet / LLM / Mix)
 	if (newComment) {
 		const commentId = (newComment as any).id;
+		// 新评论企微商务群通知（与 spam review 同为异步旁路）
+		c.executionCtx.waitUntil(
+			Promise.resolve().then(() =>
+				notifyWecomNewComment(c.env, {
+					nick: userInfo?.display_name || nick || "",
+					comment,
+					url,
+					status,
+				}),
+			),
+		);
 		c.executionCtx.waitUntil(
 			runSpamReview({
 				db: c.env.DB,

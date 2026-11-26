@@ -14,6 +14,7 @@ export interface Env {
 	LEVELS?: string;
 	IPQPS?: string;
 	AUDIT?: string;
+	WECOM_WEBHOOK?: string;
 
 	// SMTP
 	SMTP_SERVICE?: string;
